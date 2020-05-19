@@ -105,10 +105,6 @@ class NeighborSampler(object):
 
       nbr_ids = pywrap.get_nbr_res_nbr_ids(res)
       edge_ids = pywrap.get_nbr_res_edge_ids(res)
-
-      pywrap.del_nbr_res(res)
-      pywrap.del_nbr_req(req)
-
       dst_type = self._dst_types[i]
       layer_nodes = self._graph.get_nodes(dst_type,
                                           nbr_ids,
@@ -184,10 +180,6 @@ class FullNeighborSampler(NeighborSampler):
 
       nbr_ids = pywrap.get_nbr_res_nbr_ids(res)
       edge_ids = pywrap.get_nbr_res_edge_ids(res)
-
-      pywrap.del_nbr_res(res)
-      pywrap.del_nbr_req(req)
-
       dst_type = self._dst_types[i]
       layer_nodes = self._graph.get_nodes(dst_type,
                                           nbr_ids,

@@ -36,7 +36,7 @@ Status Aggregator::Aggregate(const AggregatingRequest* req,
 
   // Initialize float attributes.
   // Aggregator only takes effect on float attributes.
-  std::unique_ptr<float[]> emb(new float[dim]);
+  float* emb = new float[dim]();
 
   int64_t node_id = 0;
   int32_t segment_id = 0;
@@ -44,15 +44,15 @@ Status Aggregator::Aggregate(const AggregatingRequest* req,
   AggregatingRequest* request = const_cast<AggregatingRequest*>(req);
   for (int32_t idx = 0; idx < num_segments; idx++) {
     segment_size = 0;
-    this->InitFunc(emb.get(), dim);
+    this->InitFunc(emb, dim);
     while (!req->SegmentEnd(idx)) {
       request->Next(&node_id, &segment_id);
       segment_size++;
       this->AggFunc(
-        emb.get(), storage->GetAttribute(node_id)->f_attrs.data(), dim);
+        emb, storage->GetAttribute(node_id)->f_attrs.data(), dim);
     }
-    this->FinalFunc(emb.get(), dim, &segment_size, 1);
-    res->AppendEmbedding(emb.get());
+    this->FinalFunc(emb, dim, &segment_size, 1);
+    res->AppendEmbedding(emb);
     res->AppendSegment(segment_size);
   }
   return Status::OK();
